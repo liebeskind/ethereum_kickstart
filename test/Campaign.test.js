@@ -55,7 +55,7 @@ describe('Campaigns', () => {
     try {
       await campaign.methods.contribute().send({
         value: '5',
-        from accounts[1]
+        from: accounts[1]
       })
       assert(false); // Should never get to this.
     } catch (err) {
@@ -63,4 +63,16 @@ describe('Campaigns', () => {
     }
   });
 
+  it('allows a manager to make a payment request', async () => {
+    await campaign.methods
+    .createRequest('Buy batteries', '100', accounts[1])
+    .send({ // Going to modify contract, so need to send
+      from: accounts[0],
+      gas: '1000000'
+    })
+
+    const request = await campaign.methods.requests(0).call();
+
+    assert.equal('Buy batteries', request.description);
+  })
 })
