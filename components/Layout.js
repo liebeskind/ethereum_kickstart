@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
-import Head from 'next/head';
+import Head from 'next/head'; // Can use the Head tag to add things to the Header.  Like metatags, etc.
 import Header from './Header';
 
 export default (props) => {
