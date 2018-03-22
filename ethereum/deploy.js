@@ -11,8 +11,6 @@ const provider = new HDWalletProvider(
 );
 const web3 = new Web3(provider);
 
-const text = 'Hi there!'
-
 const deploy = async () => {
   const accounts = await web3.eth.getAccounts();
 
@@ -29,6 +27,7 @@ const deploy = async () => {
   const deploymentInfo = `
   Contract deployed from account: ${accounts[0]}
   To: ${result.options.address}
+  AtTime: ${new Date()}
   `;
   
   fs.writeFile('contractDeploymentInfo.txt', deploymentInfo, (err) => {
