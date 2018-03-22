@@ -43,7 +43,7 @@ class CampaignIndex extends Component {
             </a>
           </Link>
           {this.renderCampaigns()}
-        </div>;
+        </div>
       </Layout>
     )
   }
