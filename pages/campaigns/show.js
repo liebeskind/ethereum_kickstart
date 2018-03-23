@@ -6,12 +6,13 @@ import web3 from '../../ethereum/web3';
 import ContributeForm from '../../components/ContributeForm'
 
 class CampaignShow extends Component {
-  static async getInitialProps(props) {
+  static async getInitialProps(props) { // adds whatever returned to props.
     const campaign = Campaign(props.query.address);
 
     const summary = await campaign.methods.getSummary().call();
 
     return { // Pull the field order from campaign.sol contract.
+      address: props.query.address, // Pulls the address from the current page url.
       minimumContribution: summary[0],
       balance: summary[1],
       requestsCount: summary[2],
@@ -64,7 +65,7 @@ class CampaignShow extends Component {
             {this.renderCards()}
           </Grid.Column>
           <Grid.Column width={6}>
-            <ContributeForm />
+            <ContributeForm address={this.props.address} />
           </Grid.Column>
         </Grid>
       </Layout>
