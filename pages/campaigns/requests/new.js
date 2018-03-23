@@ -9,13 +9,39 @@ class RequestNew extends Component {
   state = {
     value: '',
     description: '',
-    recipient: ''
+    recipient: '',
+    loading: false,
+    errorMessage: ''
   };
 
   static async getInitialProps(props) {
-    const address = props.query;
+    const { address } = props.query;
 
-    return {address};
+    return { address };
+
+  }
+
+  onSubmit = async event => {
+    event.preventDefault(); // Don't want it to try submitting to our 'server', which is default behavior.
+
+    const campaign = Campaign(this.props.address);
+    const { description, value, recipient } = this.state;
+
+    this.setState({ loading: true, errorMessage: '' });
+
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await campaign.methods
+      .createRequest(
+        description,
+        web3.utils.toWei(value, 'ether'),
+        recipient
+      )
+      .send({ from: accounts[0] });
+      this.setState({ loading: false });
+    } catch (err) {
+      this.setState({ loading: false, errorMessage: err.message });
+    }
 
   }
 
@@ -23,7 +49,7 @@ class RequestNew extends Component {
     return (
       <Layout>
         <h3>Create a Request</h3>
-        <Form>
+        <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
           <Form.Field>
             <label>Description</label>
             <Input
@@ -51,7 +77,8 @@ class RequestNew extends Component {
               }
             />
           </Form.Field>
-          <Button primary>Create</Button>
+          <Message error content={this.state.errorMessage} />
+          <Button primary loading={this.state.loading}>Create</Button>
         </Form>
       </Layout>
     )
