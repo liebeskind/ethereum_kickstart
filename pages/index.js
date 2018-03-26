@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import factory from '../ethereum/factory';
-import { Card, Button } from 'semantic-ui-react';
-import Layout from '../components/Layout';
-import { Link } from '../routes';
+import React, { Component } from "react";
+import factory from "../ethereum/factory";
+import { Card, Button } from "semantic-ui-react";
+import Layout from "../components/Layout";
+import { Link } from "../routes";
 
 class CampaignIndex extends Component {
-  
-  static async getInitialProps() { // static defines a class object and is a requirement of next.js.
+  static async getInitialProps() {
+    // static defines a class object and is a requirement of next.js.
     const campaigns = await factory.methods.getDeployedCampaigns().call();
 
     return { campaigns };
@@ -16,15 +16,16 @@ class CampaignIndex extends Component {
     const items = this.props.campaigns.map(address => {
       return {
         header: address,
-        description: 
-        <Link route={`/campaigns/${address}`}>
-          <a>View Campaign</a>
-        </Link>,
+        description: (
+          <Link route={`/campaigns/${address}`}>
+            <a>View Campaign</a>
+          </Link>
+        ),
         fluid: true // Makes card stretch the entire width of container.
       };
     });
 
-    return <Card.Group items={items} />
+    return <Card.Group items={items} />;
   }
 
   render() {
@@ -34,7 +35,7 @@ class CampaignIndex extends Component {
           <h3>Open Campaigns</h3>
           <Link route="/campaigns/new">
             <a>
-              <Button  
+              <Button
                 content="Create Campaign"
                 icon="add circle"
                 floated="right"
@@ -45,7 +46,7 @@ class CampaignIndex extends Component {
           {this.renderCampaigns()}
         </div>
       </Layout>
-    )
+    );
   }
 }
 
